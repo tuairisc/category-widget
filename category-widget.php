@@ -16,9 +16,14 @@ if (!defined('ABSPATH')) {
     die('-1');
 }
 
-require_once(plugin_basename(__FILE__) . '/widget-functions.php');
-require_once(plugin_basename(__FILE__) . '/article-images/article-images.php');
-require_once(plugin_basename(__FILE__) . '/widget.php');
+require_once(dirname(__FILE__) . '/category-widget-functions.php');
+
+if (!function_exists('set_fallback_image')) {
+    // Import article images if it doesn't exist.
+    require_once(dirname(__FILE__) . '/article-images/article-images.php');
+}
+
+require_once(dirname(__FILE__) . '/widget.php');
 
 function bh_register_widget() {
     register_widget('Bhalash_Category_Widget');

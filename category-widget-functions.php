@@ -59,7 +59,7 @@ function bh_category_widget_output($cats, $show_name = true, $count = 5) {
                 'category' => $category->cat_ID
             ));
 
-            set_transient($cat_trans_name, $category_posts, get_option('tuairisc_transient_timeout')); 
+            set_transient($cat_trans_name, $category_posts, get_option('kaitain_transient_timeout')); 
         }
 
         // Fetch section trim colours.
@@ -120,7 +120,7 @@ function bh_category_widget_output($cats, $show_name = true, $count = 5) {
 
             if ($index === 0) {
                 printf('</div>');
-                printf('<div class=%s">', $right_class);
+                printf('<div class="%s">', $right_class);
             }
         }
 

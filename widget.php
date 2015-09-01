@@ -20,7 +20,7 @@ class Bhalash_Category_Widget extends WP_Widget {
 
     public function __construct() {
         parent::__construct(
-            __('bhalash_home_category', 'bhalash'),
+            __('kaitain_home_category', 'bhalash'),
             __('Featured Category Posts', 'bhalash'),
             array(
                 'description' => __('Display most-recent posts from selected category.', 'bhalash')

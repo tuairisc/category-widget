@@ -145,12 +145,12 @@ function bh_category_widget_output($cats, $show_name = true, $count = 5) {
 function bh_category_article_output($classes, $image_size) {
     ?> 
 
-    <article class="<?php printf($classes['article']); ?>" id="<?php the_ID(); ?>">
-        <a class="<?php printf($classes['anchor']); ?>" href="<?php the_permalink(); ?>" rel="bookmark">
-            <div class="thumbnail">
-            <?php post_image_html(get_the_ID(), $image_size, true); ?>
+    <article class="category-article <?php printf($classes['article']); ?>" id="<?php the_ID(); ?>">
+        <a class="category-article-link <?php printf($classes['anchor']); ?>" href="<?php the_permalink(); ?>" rel="bookmark">
+            <div class="category-article-thumbnail thumbnail">
+                <?php post_image_html(get_the_ID(), $image_size, true); ?>
             </div>
-            <div class="post-content">
+            <div class="post-content category-article-content">
                 <p class="category-article-title <?php printf($classes['paragraph']); ?>">
                     <?php the_title(); ?>
                 </p>

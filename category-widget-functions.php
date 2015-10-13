@@ -80,7 +80,7 @@ function bh_category_widget_output($category, $show_name = true, $count = 5) {
         'widget' => 'widget--category',
         'title' => 'widget__title vspace--half',
         'link' => 'widget--category__link',
-        'split' => 'flex--two-col--div',
+        'split' => 'widget--category__split flex--two-col--div',
         'side_left' => 'widget--category__left',
         'side_right' => 'widget--category__right',
     );
@@ -160,7 +160,7 @@ function bh_category_article_output($post_id, $image_size, $trim_class) {
     setup_postdata($post);
     ?> 
 
-    <article class="<?php post_class('article--category'); ?>" id="article--category--<?php the_ID(); ?>">
+    <article <?php post_class('article--category'); ?> id="article--category--<?php the_ID(); ?>">
         <a class="article--category__link <?php printf($trim_class['text']); ?>" href="<?php the_permalink(); ?>" rel="bookmark">
             <div class="article--category__thumb thumbnail">
                 <?php post_image_html(get_the_ID(), $image_size, true); ?>

@@ -68,9 +68,9 @@ function bh_category_widget_output($cats, $show_name = true, $count = 5) {
         $trim = array(
             // Section trim class information.
             'slug' => $trim,
-            'text' => sprintf('section-%s-text', $trim),
-            'hover' => sprintf('section-%s-text-hover', $trim),
-            'background' => sprintf('section-%s-background', $trim)
+            'text' => sprintf('section--%s-text', $trim),
+            'hover' => sprintf('section--%s-text-hover', $trim),
+            'background' => sprintf('section--%s-bg', $trim)
         );
 
         printf('<div class="%s">', 'category-widget');
@@ -86,7 +86,7 @@ function bh_category_widget_output($cats, $show_name = true, $count = 5) {
             );
         }
 
-        printf('<div class="%s">', 'category-widget-display');
+        printf('<div class="%s">', 'category-widget-display flex--two-col--div');
 
         foreach ($category_posts as $index => $post) { 
             $classes = '';

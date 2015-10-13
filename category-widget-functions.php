@@ -13,120 +13,132 @@
  */
 
 /**
+ * Get Widget Posts
+ * -----------------------------------------------------------------------------
+ * @param   object      $category           The category.
+ * @param   int         $count              Number of posts to fetch.
+ */
+
+function bh_category_posts($category, $count) {
+    $trans_name = 'bh_category_posts_' . $category->slug;
+
+    if (!($posts = get_transient($trans_name))) {
+        $posts = get_posts(array(
+            'numberposts' => $count,
+            'order' => 'DESC',
+            'category' => $category->cat_ID
+        ));
+
+        set_transient($trans_name, $posts, get_option('kaitain_transient_timeout')); 
+    }
+
+    return $posts;
+}
+
+/**
+ * Category Widget Section Colour Trim Classes
+ * -----------------------------------------------------------------------------
+ * @param   object      $category           The category.
+ * @return  array       $trim               Section trim CSS classes.
+ */
+
+function bh_category_trim_classes($category) {
+    global $sections;
+
+    // Fetch section trim colours.
+    $trim = $sections->get_section_slug($category);
+
+    $trim = array(
+        // Section trim class information.
+        'slug' => $trim,
+        'text' => sprintf('section--%s-text', $trim),
+        'hover' => sprintf('section--%s-text-hover', $trim),
+        'background' => sprintf('section--%s-bg', $trim)
+    );
+
+    return $trim;
+}
+
+/**
  * Category Widget Output
  * -----------------------------------------------------------------------------
  * Output the one-left-three right output of the category widget. This is in a 
  * separate function as it also used in archives.
  * 
- * @param   int/array/string    $widget_categories  Categor{y,ies}.
- * @param   int                 $numberposts        Number of posts to output.
+ * @maram   int/string      $category       Widget category.
+ * @param   bool            $show_name      Show name of and link to category.
+ * @param   int             $count          Number of posts to output.
  */
 
-function bh_category_widget_output($cats, $show_name = true, $count = 5) {
-    global $post, $sections;
-    // Category ID is appended after.
-    $trans_name = 'bh_category_posts_';
-    $categories = array();
-
-    // Resolve categories down to ID.
-    if (is_int($cats) || is_string($cats)) {
-        $categories[] = intval($cats);
-    } else if (!is_array($cats)) {
+function bh_category_widget_output($category, $show_name = true, $count = 5) {
+    if (!($category = get_category($category))) {
         return;
     }
 
-    /* Double loop:
-     * 1. Loop each supplied category.
-     * 2. For each category, output $count posts.
-     * 
-     * Order of output is 1 left, $count - 1 right.
-     * Left post has an excerpt.
-     */
+    $classes = array(
+        // Main CSS classes.
+        'widget' => 'widget--category',
+        'title' => 'widget__title vspace--half',
+        'link' => 'widget--category__link',
+        'split' => 'flex--two-col--div',
+        'side_left' => 'widget--category__left',
+        'side_right' => 'widget--category__right',
+    );
 
-    foreach($categories as $category) {
-        $category = get_category($category);
+    // Trim classes.
+    $trim = bh_category_trim_classes($category);
+    // Category posts for output.
+    $posts = bh_category_posts($category, $count);
 
-        if (!$category) {
-            continue;
-        }
-
-        $cat_trans_name = $trans_name . $category->slug;
-
-        if (!($category_posts = get_transient($cat_trans_name))) {
-            $category_posts = get_posts(array(
-                'numberposts' => $count,
-                'order' => 'DESC',
-                'category' => $category->cat_ID
-            ));
-
-            set_transient($cat_trans_name, $category_posts, get_option('kaitain_transient_timeout')); 
-        }
-
-        // Fetch section trim colours.
-        $trim = $sections->get_section_slug($category);
-
-        $trim = array(
-            // Section trim class information.
-            'slug' => $trim,
-            'text' => sprintf('section--%s-text', $trim),
-            'hover' => sprintf('section--%s-text-hover', $trim),
-            'background' => sprintf('section--%s-bg', $trim)
-        );
-
-        printf('<div class="%s">', 'category-widget');
+    printf('<div class="%s">', $classes['widget']);
         
-        if ($show_name) {
-            // Category name, and link to category.
-            printf('<h2 class="%s %s"><a title="%s" href="%s">%s</a></h2>', 
-                $trim['text'],
-                'widget-title',
-                $category->cat_name,
-                get_category_link($category),
-                $category->cat_name
-            );
-        }
-
-        printf('<div class="%s">', 'category-widget-display flex--two-col--div');
-
-        foreach ($category_posts as $index => $post) { 
-            $classes = '';
-            setup_postdata($post);
-
-            $left_class = 'bhalash-category-widget-left';
-            $right_class = 'bhalash-category-widget-right';
-
-            // "Side" posts only need athumbnail size image.
-            if ($index === 0) {
-                $image_size = 'tc_home_category_lead';
-            } else {
-                $image_size = 'tc_home_category_small';
-            }
-
-            // First post has a different layout, in a different position.
-            if ($index === 0) {
-                printf('<div class="%s">', $left_class);
-            }
-
-            $classes = get_post_class($classes, get_the_ID());
-            $classes = implode(' ', $classes);
-
-            $classes = array(
-                'article' => $classes,
-                'paragraph' => ($index === 0) ? $trim['background']: '',
-                'anchor' => $trim['hover']
-            );
-
-            bh_category_article_output($classes, $image_size);
-
-            if ($index === 0) {
-                printf('</div>');
-                printf('<div class="%s">', $right_class);
-            }
-        }
-
-        printf('</div></div></div>');
-        printf('<hr>');
+    if ($show_name) {
+        // Category name and link.
+        printf('<h2 class="%s %s"><a class="%s" title="%s" href="%s">%s</a></h2>', 
+            $classes['title'],
+            $trim['text'],
+            $classes['link'],
+            $category->cat_name,
+            get_category_link($category),
+            $category->cat_name
+        );
     }
+
+    // Main interior container.
+    printf('<div class="%s">', $classes['split']);
+
+    foreach ($posts as $index => $post) { 
+        $trim_class = array();
+        // "Side" posts only need athumbnail size image.
+        $image_size = 'tc_home_category_small';
+
+        if (!$index) {
+            // First post has a different layout, in a different position.
+            $image_size = 'tc_home_category_lead';
+            printf('<div class="%s">', $classes['side_left']);
+        }
+
+        // Left: solid background. Right: color on hover.
+        $trim_class['bg'] = (!$index) ? $trim['background'] : '';
+        $trim_class['text'] = (!$index) ? '' : $trim['hover'];
+
+        bh_category_article_output($post, $image_size, $trim_class);
+
+        if (!$index) { 
+            // If left side, close and open right.
+            printf('</div>');
+            printf('<div class="%s">', $classes['side_right']);
+        }
+    }
+
+    // Close right side.
+    printf('</div>');
+    // Close widget interior.
+    printf('</div>');
+    // Close widget.
+    printf('</div>');
+
+    printf('<hr>');
 
     wp_reset_postdata();
 }
@@ -137,23 +149,26 @@ function bh_category_widget_output($cats, $show_name = true, $count = 5) {
  * Articles on either side of the widget have the same HTML, but different
  * classes. I separated this for my sanity.
  *
- * @param   int/object      $post           The post object.
- * @param   array           $classes        Classes for article elements.
+ * @param   object          $post_id        The post object.
  * @param   string          $image_size     Thumbnail image size.
+ * @param   array           $trim_class     Classes for article elements.
  */
 
-function bh_category_article_output($classes, $image_size) {
+function bh_category_article_output($post_id, $image_size, $trim_class) {
+    global $post;
+    $post = $post_id;
+    setup_postdata($post);
     ?> 
 
-    <article class="category-article <?php printf($classes['article']); ?>" id="<?php the_ID(); ?>">
-        <a class="category-article-link <?php printf($classes['anchor']); ?>" href="<?php the_permalink(); ?>" rel="bookmark">
-            <div class="category-article-thumbnail thumbnail">
+    <article class="<?php post_class('article--category'); ?>" id="article--category--<?php the_ID(); ?>">
+        <a class="article--category__link <?php printf($trim_class['text']); ?>" href="<?php the_permalink(); ?>" rel="bookmark">
+            <div class="article--category__thumb thumbnail">
                 <?php post_image_html(get_the_ID(), $image_size, true); ?>
             </div>
-            <div class="post-content category-article-content">
-                <p class="category-article-title <?php printf($classes['paragraph']); ?>">
+            <div>
+            <h5 class="article--category__title <?php printf($trim_class['bg']); ?>">
                     <?php the_title(); ?>
-                </p>
+                </h5>
             </div>
         </a>
     </article>

@@ -44,19 +44,16 @@ function bh_category_posts($category, $count) {
 
 function bh_category_trim_classes($category) {
     global $sections;
+    $section = $sections->get_category_section_slug($category);
 
-    // Fetch section trim colours.
-    $trim = $sections->get_section_slug($category);
-
-    $trim = array(
-        // Section trim class information.
-        'slug' => $trim,
-        'text' => sprintf('section--%s-text', $trim),
-        'hover' => sprintf('section--%s-text-hover', $trim),
-        'background' => sprintf('section--%s-bg', $trim)
+    $classes = array(
+        'text' => 'section--' . $section . '--text',
+        'texthover' => 'section--' . $section . '--text-hover',
+        'bg' => 'section--' . $section . '--bg',
+        'bghover' => 'section--' . $section . '--bg-hover'
     );
 
-    return $trim;
+    return $classes;
 }
 
 /**
@@ -119,8 +116,8 @@ function bh_category_widget_output($category, $show_name = true, $count = 5) {
         }
 
         // Left: solid background. Right: color on hover.
-        $trim_class['bg'] = (!$index) ? $trim['background'] : '';
-        $trim_class['text'] = (!$index) ? '' : $trim['hover'];
+        $trim_class['bg'] = (!$index) ? $trim['bg'] : '';
+        $trim_class['text'] = (!$index) ? '' : $trim['texthover'];
 
         bh_category_article_output($post, $image_size, $trim_class);
 
@@ -166,7 +163,7 @@ function bh_category_article_output($post_id, $image_size, $trim_class) {
                 <?php post_image_html(get_the_ID(), $image_size, true); ?>
             </div>
             <div>
-            <h5 class="article--category__title <?php printf($trim_class['bg']); ?>">
+            <h5 class="article--category__title title <?php printf($trim_class['bg']); ?>">
                     <?php the_title(); ?>
                 </h5>
             </div>

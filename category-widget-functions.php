@@ -160,7 +160,19 @@ function bh_category_article_output($post_id, $image_size, $trim_class) {
     <article <?php post_class('article--category'); ?> id="article--category--<?php the_ID(); ?>">
         <a class="article--category__link <?php printf($trim_class['text']); ?>" href="<?php the_permalink(); ?>" rel="bookmark">
             <div class="article--category__thumb thumbnail">
-                <?php post_image_html(get_the_ID(), $image_size, true); ?>
+            <?php // Check for youtube code
+                if ( get_field('youtube_embed_code') ) {
+
+                    // $youtube_embed_code = get_field('youtube_embed_code');                    
+                    // $output = edum_youtube_embed_resize($youtube_embed_code, 380, 210);
+                    // print_r($output);
+
+                    the_field('youtube_embed_code');
+
+                } else {
+                    post_image_html(get_the_ID(), $image_size, true); 
+                }
+            ?>
             </div>
             <div>
                 <h5 class="article--category__title title <?php printf($trim_class['bg']); ?>">
@@ -172,5 +184,33 @@ function bh_category_article_output($post_id, $image_size, $trim_class) {
 
     <?php
 }
+
+
+// function edum_youtube_embed_resize($youtube_embed_html_input, $width, $height ) {
+
+//     $doc = new \DOMDocument();
+//     $doc->loadHTML($youtube_embed_html_input);
+
+//     // all links in document
+//     $dimensions = array();
+//     $arr = $doc->getElementsByTagName("iframe"); // DOMNodeList Object
+//     foreach($arr as $item) { // DOMElement Object
+//         $embed_width =  $item->getAttribute("width");
+//         $embed_height =  $item->getAttribute("height");
+//         $dimensions[] = array(
+//             'embed_width' => $embed_width,
+//             'embed_height' => $embed_height,
+//             'width' => $width,
+//             'height' => $height
+//         );
+//         error_log($dimensions);
+//         $item->removeAttribute('width');
+//         $item->setAttribute('width', $width);
+//         $item->removeAttribute('height');
+//         $item->setAttribute('height', $height);
+//     }
+
+//     return $doc->saveHTML();
+// }
 
 ?>

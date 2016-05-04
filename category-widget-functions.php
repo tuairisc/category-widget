@@ -21,8 +21,8 @@
 
 function bh_category_posts($category, $count) {
     $trans_name = 'bh_category_posts_' . $category->slug;
-
-    if (!($posts = get_transient($trans_name))) {
+    
+    if (false === ($posts = get_transient($trans_name))) {
         $posts = get_posts(array(
             'numberposts' => $count,
             'order' => 'DESC',
@@ -67,11 +67,10 @@ function bh_category_trim_classes($category) {
  * @param   int             $count          Number of posts to output.
  */
 
-function bh_category_widget_output($category, $show_name = true, $count = 5) {
+function bh_category_widget_output($category, $show_name = true, $count = 4) {
     if (!($category = get_category($category))) {
         return;
     }
-
     $classes = array(
         // Main CSS classes.
         'widget' => 'widget--category',
@@ -119,7 +118,7 @@ function bh_category_widget_output($category, $show_name = true, $count = 5) {
         $trim_class['bg'] = (!$index) ? $trim['bg'] : '';
         $trim_class['text'] = (!$index) ? '' : $trim['texthover'];
 
-        bh_category_article_output($post, $image_size, $trim_class);
+        bh_category_article_output($post, $image_size, $trim_class, $index);
 
         if (!$index) { 
             // If left side, close and open right.
@@ -151,7 +150,7 @@ function bh_category_widget_output($category, $show_name = true, $count = 5) {
  * @param   array           $trim_class     Classes for article elements.
  */
 
-function bh_category_article_output($post_id, $image_size, $trim_class) {
+function bh_category_article_output($post_id, $image_size, $trim_class, $index) {
     global $post;
     $post = $post_id;
     setup_postdata($post);
@@ -160,15 +159,11 @@ function bh_category_article_output($post_id, $image_size, $trim_class) {
     <article <?php post_class('article--category'); ?> id="article--category--<?php the_ID(); ?>">
         <a class="article--category__link <?php printf($trim_class['text']); ?>" href="<?php the_permalink(); ?>" rel="bookmark">
             <div class="article--category__thumb thumbnail">
-            <?php // Check for youtube code
-                if ( get_field('youtube_embed_code') ) {
-
-                    // $youtube_embed_code = get_field('youtube_embed_code');                    
-                    // $output = edum_youtube_embed_resize($youtube_embed_code, 380, 210);
-                    // print_r($output);
-
+            <?php 
+                // Check for youtube code
+                // and index for first post
+                if ( !$index && get_field('youtube_embed_code') ) {
                     the_field('youtube_embed_code');
-
                 } else {
                     post_image_html(get_the_ID(), $image_size, true); 
                 }
@@ -183,34 +178,6 @@ function bh_category_article_output($post_id, $image_size, $trim_class) {
     </article>
 
     <?php
-}
-
-
-// function edum_youtube_embed_resize($youtube_embed_html_input, $width, $height ) {
-
-//     $doc = new \DOMDocument();
-//     $doc->loadHTML($youtube_embed_html_input);
-
-//     // all links in document
-//     $dimensions = array();
-//     $arr = $doc->getElementsByTagName("iframe"); // DOMNodeList Object
-//     foreach($arr as $item) { // DOMElement Object
-//         $embed_width =  $item->getAttribute("width");
-//         $embed_height =  $item->getAttribute("height");
-//         $dimensions[] = array(
-//             'embed_width' => $embed_width,
-//             'embed_height' => $embed_height,
-//             'width' => $width,
-//             'height' => $height
-//         );
-//         error_log($dimensions);
-//         $item->removeAttribute('width');
-//         $item->setAttribute('width', $width);
-//         $item->removeAttribute('height');
-//         $item->setAttribute('height', $height);
-//     }
-
-//     return $doc->saveHTML();
-// }
+} 
 
 ?>

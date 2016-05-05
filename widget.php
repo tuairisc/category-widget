@@ -67,7 +67,6 @@ class Bhalash_Category_Widget extends WP_Widget {
             </select>
             <li>
                 <input type="number" id="<?php printf($this->get_field_id('post_count')); ?>" name="<?php printf($this->get_field_name('post_count')); ?>" value="<?php printf($instance['post_count']); ?>" min="0" max="5"/>
-                <pre><?php printf($instance['post_count']); ?> = <?php printf( gettype($instance['post_count'])); ?></pre>
                 <label for="<?php printf($this->get_field_id('post_count')); ?>"><?php _e('Number of posts to display', 'bhalash'); ?></label>
             </li>
         </ul>

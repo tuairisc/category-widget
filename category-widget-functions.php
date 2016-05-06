@@ -169,7 +169,7 @@ function bh_category_article_output($post_id, $image_size, $trim_class, $index) 
                 }
             ?>
             </div>
-            <div>
+            <div class="article--category__text">
                 <h5 class="article--category__title title <?php printf($trim_class['bg']); ?>">
                     <?php the_title(); ?>
                 </h5>

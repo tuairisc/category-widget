@@ -171,7 +171,13 @@ function bh_category_article_output($post_id, $image_size, $trim_class, $index) 
             </div>
             <div class="article--category__text">
                 <h5 class="article--category__title title <?php printf($trim_class['bg']); ?>">
-                    <?php the_title(); ?>
+                    <?php
+                    if ($index === 1 || $index === 2 || $index === 3 ) {
+                        printf(kaitain_excerpt(get_the_title(), 12)); 
+                    } else {
+                        the_title();
+                    }
+                    ?>
                 </h5>
             </div>
         </a>

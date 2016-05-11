@@ -154,6 +154,7 @@ function bh_category_article_output($post_id, $image_size, $trim_class, $index) 
     global $post;
     $post = $post_id;
     setup_postdata($post);
+    $limit = 12;
     ?> 
 
     <article <?php post_class('article--category'); ?> id="article--category--<?php the_ID(); ?>">
@@ -173,7 +174,7 @@ function bh_category_article_output($post_id, $image_size, $trim_class, $index) 
                 <h5 class="article--category__title title <?php printf($trim_class['bg']); ?>">
                     <?php
                     if ($index === 1 || $index === 2 || $index === 3 ) {
-                        printf(kaitain_excerpt(get_the_title(), 12)); 
+                        printf(kaitain_excerpt(get_the_title(), $limit)); 
                     } else {
                         the_title();
                     }

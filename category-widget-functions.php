@@ -67,7 +67,7 @@ function bh_category_trim_classes($category) {
  * @param   int             $count          Number of posts to output.
  */
 
-function bh_category_widget_output($category, $show_name = true, $count = 4) {
+function bh_category_widget_output($category, $show_name = true, $count = 4, $limit = 12) {
     if (!($category = get_category($category))) {
         return;
     }
@@ -118,7 +118,7 @@ function bh_category_widget_output($category, $show_name = true, $count = 4) {
         $trim_class['bg'] = (!$index) ? $trim['bg'] : '';
         $trim_class['text'] = (!$index) ? '' : $trim['texthover'];
 
-        bh_category_article_output($post, $image_size, $trim_class, $index);
+        bh_category_article_output($post, $image_size, $trim_class, $index, $limit);
 
         if (!$index) { 
             // If left side, close and open right.
@@ -150,11 +150,11 @@ function bh_category_widget_output($category, $show_name = true, $count = 4) {
  * @param   array           $trim_class     Classes for article elements.
  */
 
-function bh_category_article_output($post_id, $image_size, $trim_class, $index) {
+function bh_category_article_output($post_id, $image_size, $trim_class, $index, $limit) {
     global $post;
     $post = $post_id;
     setup_postdata($post);
-    $limit = 12;
+    
     ?>
     <?php
         if ( !$index && get_field('youtube_embed_code') ) {   ?>

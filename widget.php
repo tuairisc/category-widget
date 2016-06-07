@@ -39,7 +39,8 @@ class Bhalash_Category_Widget extends WP_Widget {
             // Widget defaults.
             'category' => 0,
             'show_category_name' => false,
-            'post_count' => 4
+            'post_count' => 4,
+            'title_word_limit' => 12
         );
 
         $instance = wp_parse_args($instance, $defaults);
@@ -69,6 +70,10 @@ class Bhalash_Category_Widget extends WP_Widget {
                 <input type="number" id="<?php printf($this->get_field_id('post_count')); ?>" name="<?php printf($this->get_field_name('post_count')); ?>" value="<?php printf($instance['post_count']); ?>" min="0" max="5"/>
                 <label for="<?php printf($this->get_field_id('post_count')); ?>"><?php _e('Number of posts to display', 'bhalash'); ?></label>
             </li>
+            <li>
+                <input type="number" id="<?php printf($this->get_field_id('title_word_limit')); ?>" name="<?php printf($this->get_field_name('title_word_limit')); ?>" value="<?php printf($instance['title_word_limit']); ?>" min="0" max="30"/>
+                <label for="<?php printf($this->get_field_id('title_word_limit')); ?>"><?php _e('Post title word limit (eg. 12)', 'bhalash'); ?></label>
+            </li>
         </ul>
         <script>
             jQuery('<?php printf('#%s', $this->get_field_id('show_category_name')); ?>').prop('checked', <?php printf(($instance['show_category_name']) ? 'true' : 'false'); ?>);
@@ -92,6 +97,7 @@ class Bhalash_Category_Widget extends WP_Widget {
         $defaults['show_category_name'] = ($new_defaults['show_category_name'] === 'on');
         $defaults['category'] = intval($new_defaults['category']);
         $defaults['post_count'] = intval($new_defaults['post_count']);
+        $defaults['title_word_limit'] = intval($new_defaults['title_word_limit']);
 
         return $defaults;
     }
@@ -108,7 +114,7 @@ class Bhalash_Category_Widget extends WP_Widget {
             printf('%s', $defaults['before_widget']);
         }
         
-        bh_category_widget_output($instance['category'], $instance['show_category_name'], 4);
+        bh_category_widget_output($instance['category'], $instance['show_category_name'], 4, $instance['title_word_limit']);
 
         if (!empty($defaults['after_widget'])) {
             printf('%s', $defaults['after_widget']);

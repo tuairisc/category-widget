@@ -155,21 +155,23 @@ function bh_category_article_output($post_id, $image_size, $trim_class, $index) 
     $post = $post_id;
     setup_postdata($post);
     $limit = 12;
-    ?> 
-
-    <article <?php post_class('article--category'); ?> id="article--category--<?php the_ID(); ?>">
-        <a class="article--category__link <?php printf($trim_class['text']); ?>" href="<?php the_permalink(); ?>" rel="bookmark">
-            <div class="article--category__thumb thumbnail">
-            <?php 
-                // Check for youtube code
-                // and index for first post
-                if ( !$index && get_field('youtube_embed_code') ) {
-                    the_field('youtube_embed_code');
-                } else {
-                    post_image_html(get_the_ID(), $image_size, true); 
-                }
-            ?>
-            </div>
+    ?>
+    <?php
+        if ( !$index && get_field('youtube_embed_code') ) {   ?>
+            <article <?php post_class('article--category youtube-embed-post'); ?> id="article--category--<?php the_ID(); ?>">            
+                <a class="article--category__link <?php printf($trim_class['text']); ?>" href="<?php the_permalink(); ?>" rel="bookmark">
+                    <div class="article--category__thumb thumbnail youtube-embed-container">
+                        <?php   the_field('youtube_embed_code'); ?>
+                    </div>
+    <?php
+        } else { ?>
+            <article <?php post_class('article--category'); ?> id="article--category--<?php the_ID(); ?>">
+                <a class="article--category__link <?php printf($trim_class['text']); ?>" href="<?php the_permalink(); ?>" rel="bookmark"> 
+                    <div class="article--category__thumb thumbnail">
+                        <?php post_image_html(get_the_ID(), $image_size, true); ?>
+                    </div>
+    <?php
+        } ?>
             <div class="article--category__text">
                 <h5 class="article--category__title title <?php printf($trim_class['bg']); ?>">
                     <?php
@@ -183,8 +185,6 @@ function bh_category_article_output($post_id, $image_size, $trim_class, $index) 
             </div>
         </a>
     </article>
-
     <?php
 } 
-
 ?>

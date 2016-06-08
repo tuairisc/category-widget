@@ -74,7 +74,8 @@ function bh_category_widget_output($category, $show_name = true, $count = 4, $li
     $classes = array(
         // Main CSS classes.
         'widget' => 'widget--category',
-        'title' => 'widget__title vspace--half',
+        //'title' => 'widget__title vspace--half',
+        'title' => 'widget__title',
         'link' => 'widget--category__link',
         'split' => 'widget--category__split flex--two-col--div',
         'side_left' => 'widget--category__left',
@@ -87,7 +88,11 @@ function bh_category_widget_output($category, $show_name = true, $count = 4, $li
     $posts = bh_category_posts($category, $count);
 
     printf('<div class="%s">', $classes['widget']);
-        
+    
+    // Trim seperator
+    echo '<div class="section-trim ';
+    printf($trim['bg']);
+    echo '"></div>';
     if ($show_name) {
         // Category name and link.
         printf('<h2 class="%s %s"><a class="%s" title="%s" href="%s">%s</a></h2>', 
@@ -134,7 +139,7 @@ function bh_category_widget_output($category, $show_name = true, $count = 4, $li
     // Close widget.
     printf('</div>');
 
-    printf('<hr>');
+    //printf('<hr>');
 
     wp_reset_postdata();
 }

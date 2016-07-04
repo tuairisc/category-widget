@@ -111,7 +111,8 @@ function bh_category_widget_output($category, $show_name = true, $count = 4, $li
     foreach ($posts as $index => $post) { 
         $trim_class = array();
         // "Side" posts only need athumbnail size image.
-        $image_size = 'tc_home_category_small';
+        //$image_size = 'tc_home_category_small';
+        $image_size = 'small';
 
         if (!$index) {
             // First post has a different layout, in a different position.
@@ -123,7 +124,10 @@ function bh_category_widget_output($category, $show_name = true, $count = 4, $li
         $trim_class['bg'] = (!$index) ? $trim['bg'] : '';
         $trim_class['text'] = (!$index) ? '' : $trim['texthover'];
 
-        bh_category_article_output($post, $image_size, $trim_class, $index, $limit);
+        bh_category_article_output($post, $image_size, $trim_class, array(
+            'index' => $index,
+            'limit' => $limit)
+        );
 
         if (!$index) { 
             // If left side, close and open right.
@@ -153,13 +157,17 @@ function bh_category_widget_output($category, $show_name = true, $count = 4, $li
  * @param   object          $post_id        The post object.
  * @param   string          $image_size     Thumbnail image size.
  * @param   array           $trim_class     Classes for article elements.
+ * @param   array           $options        Associative array of extra options
  */
 
-function bh_category_article_output($post_id, $image_size, $trim_class, $index, $limit) {
+function bh_category_article_output($post_id, $image_size, $trim_class, $options = array() ) {
     global $post;
     $post = $post_id;
     setup_postdata($post);
     
+    $index = $options['index'];
+    $limit = $options['limit'];
+
     ?>
     <?php
         if ( !$index && get_field('youtube_embed_code') ) {   ?>
@@ -172,7 +180,9 @@ function bh_category_article_output($post_id, $image_size, $trim_class, $index, 
         } else { ?>
             <article <?php post_class('article--category'); ?> id="article--category--<?php the_ID(); ?>">
                 <a class="article--category__link <?php printf($trim_class['text']); ?>" href="<?php the_permalink(); ?>" rel="bookmark"> 
-                    <div class="article--category__thumb thumbnail">
+                    <div class="article--category__thumb thumbnail <?php 
+                        if ( $index == 0 ) { echo 'img-frame'; }
+                    ?>">
                         <?php post_image_html(get_the_ID(), $image_size, true); ?>
                     </div>
     <?php

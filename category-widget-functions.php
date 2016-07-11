@@ -180,8 +180,8 @@ function bh_category_article_output($post_id, $image_size, $trim_class, $options
         } else { ?>
             <article <?php post_class('article--category'); ?> id="article--category--<?php the_ID(); ?>">
                 <a class="article--category__link <?php printf($trim_class['text']); ?>" href="<?php the_permalink(); ?>" rel="bookmark"> 
-                    <div class="article--category__thumb thumbnail <?php 
-                        if ( $index == 0 ) { echo 'img-frame'; }
+                    <div class="article--category__thumb thumbnail img-frame <?php 
+                        // if ( $index == 0 ) { echo 'img-frame'; }
                     ?>">
                         <?php post_image_html(get_the_ID(), $image_size, true); ?>
                     </div>

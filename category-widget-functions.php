@@ -174,7 +174,11 @@ function bh_category_article_output($post_id, $image_size, $trim_class, $options
             <article <?php post_class('article--category youtube-embed-post'); ?> id="article--category--<?php the_ID(); ?>">            
                 <a class="article--category__link <?php printf($trim_class['text']); ?>" href="<?php the_permalink(); ?>" rel="bookmark">
                     <div class="article--category__thumb thumbnail youtube-embed-container">
-                        <?php   the_field('youtube_embed_code'); ?>
+                        <div class="video-icon-overlay"></div>
+                        <?php
+                        //   the_field('youtube_embed_code');
+                        post_image_html(get_the_ID(), $image_size, true);
+                        ?>
                     </div>
     <?php
         } else { ?>

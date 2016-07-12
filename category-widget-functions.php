@@ -67,7 +67,7 @@ function bh_category_trim_classes($category) {
  * @param   int             $count          Number of posts to output.
  */
 
-function bh_category_widget_output($category, $show_name = true, $count = 4, $limit = 12) {
+function bh_category_widget_output($category, $show_name = true, $count = 4, $limit = 10) {
     if (!($category = get_category($category))) {
         return;
     }

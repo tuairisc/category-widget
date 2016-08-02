@@ -62,12 +62,13 @@ function bh_category_trim_classes($category) {
  * Output the one-left-three right output of the category widget. This is in a 
  * separate function as it also used in archives.
  * 
- * @maram   int/string      $category       Widget category.
+ * @param   int/string      $category       Widget category.
  * @param   bool            $show_name      Show name of and link to category.
  * @param   int             $count          Number of posts to output.
+ * @param   int             $limit          Character limit for post titles
  */
 
-function bh_category_widget_output($category, $show_name = true, $count = 4, $limit = 10) {
+function bh_category_widget_output($category, $show_name = true, $count = 4, $limit = 120) {
     if (!($category = get_category($category))) {
         return;
     }

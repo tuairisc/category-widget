@@ -112,8 +112,8 @@ function bh_category_widget_output($category, $show_name = true, $count = 4, $li
     foreach ($posts as $index => $post) { 
         $trim_class = array();
         // "Side" posts only need athumbnail size image.
-        //$image_size = 'tc_home_category_small';
-        $image_size = 'small';
+        $image_size = 'tc_home_category_small';
+        //$image_size = 'small';
 
         if (!$index) {
             // First post has a different layout, in a different position.
